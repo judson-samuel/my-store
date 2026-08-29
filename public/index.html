@@ -6,10 +6,10 @@
     <title>My Store</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
-        header { text-align: center; margin-bottom: 30px; }
+        header { text-align: center; margin-bottom: 20px; }
+        .cart-summary { background: #fff; padding: 15px; border-radius: 8px; max-width: 400px; margin: 0 auto 20px auto; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .products { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
         .product-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 200px; text-align: center; }
-        .product-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 4px; }
         .product-card h3 { margin: 10px 0; }
         .price { color: #27ae60; font-weight: bold; font-size: 1.1em; }
         button { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
@@ -17,17 +17,42 @@
     </style>
 </head>
 <body>
+
     <header>
         <h1>Welcome to My Online Store!</h1>
         <p>Browse our products and shop online.</p>
     </header>
+
+    <div class="cart-summary">
+        <h3>Shopping Cart</h3>
+        <p>Items Selected: <span id="item-count">0</span></p>
+        <p>Total Amount: $<span id="total-price">0.00</span></p>
+    </div>
+
     <div class="products">
         <div class="product-card">
-            <img src="YOUR_IMAGE_URL_HERE" alt="Cool T-Shirt">
             <h3>Cool T-Shirt</h3>
             <p class="price">$19.99</p>
-            <button>Add to Cart</button>
+            <button onclick="addToCart(19.99)">Add to Cart</button>
+        </div>
+        <div class="product-card">
+            <h3>Smart Watch</h3>
+            <p class="price">$49.99</p>
+            <button onclick="addToCart(49.99)">Add to Cart</button>
         </div>
     </div>
+
+    <script>
+        let totalCount = 0;
+        let totalPrice = 0;
+
+        function addToCart(price) {
+            totalCount += 1;
+            totalPrice += price;
+            document.getElementById('item-count').innerText = totalCount;
+            document.getElementById('total-price').innerText = totalPrice.toFixed(2);
+        }
+    </script>
+
 </body>
 </html>
