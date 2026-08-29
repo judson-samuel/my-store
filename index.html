@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Online Store</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f9; }
+        header { display: flex; justify-content: space-between; align-items: center; background: #333; color: #fff; padding: 15px 30px; border-radius: 5px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 30px; }
+        .product-card { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .product-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 5px; }
+        .product-card button { background: #28a745; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; margin-top: 10px; }
+        .product-card button:hover { background: #218838; }
+        .cart-section { margin-top: 40px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>ShopLogo</h2>
+        <div>Cart Items: <span id="cart-count">0</span></div>
+    </header>
+
+    <h1>Featured Products</h1>
+    <div class="product-grid" id="product-grid">
+        <!-- Products will load dynamically via JavaScript -->
+    </div>
+
+    <div class="cart-section">
+        <h2>Your Shopping Cart</h2>
+        <ul id="cart-items">
+            <li>Cart is empty</li>
+        </ul>
+        <h3>Total: $<span id="cart-total">0.00</span></h3>
+        <button onclick="alert('Proceeding to checkout simulation!')" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Checkout</button>
+    </div>
+
+    <script>
+        let cart = [];
+
+        async function loadProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const products = await response.json();
+                const grid = document.getElementById('product-grid');
+                
+                grid.innerHTML = products.map(product => `
+                    <div class="product-card">
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>$${product.price.toFixed(2)}</p>
+                        <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const cartList = document.getElementById('cart-items');
+            const totalSpan = document.getElementById('cart-total');
+
+            if (cart.length === 0) {
+                cartList.innerHTML = '<li>Cart is empty</li>';
+                totalSpan.innerText = '0.00';
+                return;
+            }
+
+            let total = 0;
+            cartList.innerHTML = cart.map(item => {
+                total += item.price;
+                return `<li>${item.name} - $${item.price.toFixed(2)}</li>`;
+            }).join('');
+            
+            totalSpan.innerText = total.toFixed(2);
+        }
+
+        loadProducts();
+    </script>
+</body>
+</html>
