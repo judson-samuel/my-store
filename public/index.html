@@ -5,43 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Store</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
-        header { text-align: center; margin-bottom: 20px; }
-        .cart-summary { background: #fff; padding: 15px; border-radius: 8px; max-width: 400px; margin: 0 auto 20px auto; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .products { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-        .product-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 200px; text-align: center; }
-        .product-card h3 { margin: 10px 0; }
-        .price { color: #27ae60; font-weight: bold; font-size: 1.1em; }
-        button { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #2980b9; }
+        /* --- Website Styling --- */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            /* Changed background color from plain white to a light teal */
+            background-color: #e0f7fa;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #006064; /* Darker teal for header text */
+        }
+
+        /* Styling for the Shopping Cart Summary Box */
+        .cart-summary {
+            background-color: #ffffff; /* White box to make it pop */
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 0 auto 30px auto;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow */
+            border: 2px solid #00838f;
+        }
+
+        .cart-summary h3 { margin-top: 0; color: #00838f; }
+
+        /* --- Product Grid Styling --- */
+        .products {
+            display: flex;
+            gap: 30px; /* Space between cards */
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Styling for individual Product Cards */
+        .product-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 220px; /* Fixed width for uniform cards */
+            text-align: center;
+            transition: transform 0.3s ease; /* Adds a smooth hover effect */
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px); /* Lifts card slightly on hover */
+        }
+
+        /* Image Styling within the card */
+        .product-card img {
+            width: 100%; /* Stretches image to fit card width */
+            height: 180px; /* Fixed height */
+            object-fit: contain; /* Ensures image is fully visible without stretching */
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .product-card h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .price {
+            color: #2e7d32; /* Green color for price */
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #00838f; /* Teal button color */
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #006064; /* Darker teal on hover */
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Welcome to My Online Store!</h1>
+        <h1>Welcome to My Colorful Online Store!</h1>
         <p>Browse our products and shop online.</p>
     </header>
 
+    <!-- Shopping Cart Summary Section -->
     <div class="cart-summary">
-        <h3>Shopping Cart</h3>
+        <h3>My Shopping Cart</h3>
         <p>Items Selected: <span id="item-count">0</span></p>
         <p>Total Amount: $<span id="total-price">0.00</span></p>
     </div>
 
+    <!-- Product Listing Section -->
     <div class="products">
+        <!-- Product 1: Cool T-Shirt -->
         <div class="product-card">
+            <!-- REPLACEMENT STEP: Put your image URL here -->
+            <img src="https://m.media-amazon.com/images/I/61mX90K66xL._AC_UX679_.jpg" alt="Cool T-Shirt">
             <h3>Cool T-Shirt</h3>
             <p class="price">$19.99</p>
             <button onclick="addToCart(19.99)">Add to Cart</button>
         </div>
+
+        <!-- Product 2: Smart Watch -->
         <div class="product-card">
+            <!-- REPLACEMENT STEP: Put your image URL here -->
+            <img src="https://m.media-amazon.com/images/I/71E6hH3W+yL._AC_SX679_.jpg" alt="Smart Watch">
             <h3>Smart Watch</h3>
             <p class="price">$49.99</p>
             <button onclick="addToCart(49.99)">Add to Cart</button>
         </div>
     </div>
 
+    <!-- JavaScript for Cart Functionality -->
     <script>
         let totalCount = 0;
         let totalPrice = 0;
@@ -50,6 +140,7 @@
             totalCount += 1;
             totalPrice += price;
             document.getElementById('item-count').innerText = totalCount;
+            // toFixed(2) ensures it always shows 2 decimal places for currency
             document.getElementById('total-price').innerText = totalPrice.toFixed(2);
         }
     </script>
