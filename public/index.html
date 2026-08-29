@@ -3,11 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Store</title>
-    <link rel="stylesheet" href="style.css">
+    <title>My Online Store</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+        header { text-align: center; margin-bottom: 30px; }
+        .products { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .product-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 200px; text-align: center; }
+        .product-card h3 { margin: 10px 0; }
+        .price { color: #27ae60; font-weight: bold; font-size: 1.1em; }
+        button { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #2980b9; }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My Online Store!</h1>
-    <p>Browse our products and shop online.</p>
+
+    <header>
+        <h1>Welcome to My Online Store!</h1>
+        <p>Browse our products and shop online.</p>
+    </header>
+
+    <div class="products">
+        <div class="product-card">
+            <h3>Cool T-Shirt</h3>
+            <p class="price">$19.99</p>
+            <button>Add to Cart</button>
+        </div>
+        <div class="product-card">
+            <h3>Smart Watch</h3>
+            <p class="price">$49.99</p>
+            <button>Add to Cart</button>
+        </div>
+    </div>
+
 </body>
 </html>
