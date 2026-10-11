@@ -217,17 +217,17 @@
     <div class="search-container">
         <div class="search-box">
             <span>🔍</span>
-            <input type="text" placeholder="Search apparel...">
+            <input type="text" id="search-input" placeholder="Search apparel..." onkeyup="filterProducts()">
         </div>
     </div>
 
     <div class="categories">
-        <button class="category-btn active">All</button>
-        <button class="category-btn">Jersey</button>
-        <button class="category-btn">Shirt</button>
-        <button class="category-btn">Pant</button>
-        <button class="category-btn">Hoodie</button>
-        <button class="category-btn">Oversize T-Shirt</button>
+        <button class="category-btn active" onclick="filterCategory('All', this)">All</button>
+        <button class="category-btn" onclick="filterCategory('Jersey', this)">Jersey</button>
+        <button class="category-btn" onclick="filterCategory('Shirt', this)">Shirt</button>
+        <button class="category-btn" onclick="filterCategory('Pant', this)">Pant</button>
+        <button class="category-btn" onclick="filterCategory('Hoodie', this)">Hoodie</button>
+        <button class="category-btn" onclick="filterCategory('Oversize T-Shirt', this)">Oversize T-Shirt</button>
     </div>
 
     <div class="cart-badge-container">
@@ -237,8 +237,8 @@
 
     <div class="section-title">Trending Collection</div>
 
-    <div class="products-grid">
-        <div class="product-card">
+    <div class="products-grid" id="products-grid">
+        <div class="product-card" data-category="Oversize T-Shirt">
             <div class="product-img-container">
                 <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80" alt="Oversize T-Shirt">
             </div>
@@ -253,7 +253,7 @@
             </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-category="Hoodie">
             <div class="product-img-container">
                 <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=500&q=80" alt="Hoodie">
             </div>
@@ -268,7 +268,7 @@
             </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-category="Jersey">
             <div class="product-img-container">
                 <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=500&q=80" alt="Jersey">
             </div>
@@ -283,7 +283,7 @@
             </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-category="Shirt">
             <div class="product-img-container">
                 <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=500&q=80" alt="Shirt">
             </div>
@@ -295,6 +295,21 @@
                     <span class="original-price">₹1,499</span>
                 </div>
                 <button class="add-to-cart-btn" onclick="addToCart(849)">🛒 Add Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="Pant">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=500&q=80" alt="Pant">
+            </div>
+            <div class="product-details">
+                <div class="product-title">Cargo Jogger Pants</div>
+                <div class="product-weight">👖 Streetwear Fit</div>
+                <div class="price-row">
+                    <span class="current-price">₹999</span>
+                    <span class="original-price">₹1,799</span>
+                </div>
+                <button class="add-to-cart-btn" onclick="addToCart(999)">🛒 Add Cart</button>
             </div>
         </div>
     </div>
@@ -317,6 +332,7 @@
     <script>
         let totalCount = 0;
         let totalPrice = 0;
+        let currentCategory = 'All';
 
         function addToCart(price) {
             totalCount += 1;
@@ -324,6 +340,40 @@
             document.getElementById('item-count').innerText = totalCount;
             document.getElementById('cart-count-badge').innerText = totalCount;
             document.getElementById('total-price').innerText = totalPrice.toFixed(2);
+        }
+
+        function filterCategory(category, buttonElement) {
+            currentCategory = category;
+            
+            // Update active button styling
+            let buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+
+            applyFilters();
+        }
+
+        function filterProducts() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            let searchQuery = document.getElementById('search-input').value.toLowerCase();
+            let products = document.querySelectorAll('.product-card');
+
+            products.forEach(product => {
+                let category = product.getAttribute('data-category');
+                let title = product.querySelector('.product-title').innerText.toLowerCase();
+
+                let matchesCategory = (currentCategory === 'All' || category === currentCategory);
+                let matchesSearch = title.includes(searchQuery);
+
+                if (matchesCategory && matchesSearch) {
+                    product.style.display = 'flex';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
         }
     </script>
 
