@@ -178,6 +178,45 @@
         }
         .cart-badge-container span { color: #111; font-weight: bold; }
         
+        /* Admin Panel Section */
+        .admin-panel {
+            padding: 20px;
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: none;
+        }
+        .admin-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th { background-color: #f1f3f5; }
+        .admin-toggle-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
         /* Bottom Navigation Bar */
         .bottom-nav {
             position: fixed;
@@ -298,13 +337,35 @@
 <body>
 
     <header>
-        <div class="menu-icon">☰</div>
+        <div class="menu-icon" onclick="checkAdminAccess()">☰</div>
         <div class="logo-area">
             <div class="logo-title">PGT Outfits</div>
             <div id="header-user-display" class="user-greeting"></div>
         </div>
         <div class="cart-icon">🛒<span id="cart-count-badge" style="font-size: 12px; background: red; color: white; border-radius: 50%; padding: 2px 6px; vertical-align: top;">0</span></div>
     </header>
+
+    <!-- Admin Customer List Panel -->
+    <div class="admin-panel" id="admin-panel">
+        <div class="admin-title">
+            <span>Admin Dashboard: Registered Customers</span>
+            <button class="admin-toggle-btn" onclick="toggleAdminPanel()">Close Panel</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>WhatsApp</th>
+                    <th>Mail ID</th>
+                </tr>
+            </thead>
+            <tbody id="customer-table-body">
+                <!-- Customer rows loaded dynamically -->
+            </tbody>
+        </table>
+    </div>
 
     <div class="hero-banner">
         <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80" alt="Hero Banner">
@@ -606,6 +667,53 @@
             setTimeout(() => {
                 toggleLoginModal(false);
             }, 1200);
+        }
+
+        function checkAdminAccess() {
+            let passcode = prompt("Enter Admin Passcode:");
+            // Change 'pgtadmin2026' below to your own secret passcode if desired
+            if (passcode === "pgtadmin2026") {
+                toggleAdminPanel();
+            } else if (passcode !== null) {
+                alert("Incorrect passcode! Access denied.");
+            }
+        }
+
+        function toggleAdminPanel() {
+            let panel = document.getElementById('admin-panel');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+                loadAdminCustomers();
+                panel.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function loadAdminCustomers() {
+            let tbody = document.getElementById('customer-table-body');
+            tbody.innerHTML = '';
+            let count = 0;
+
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if (key.startsWith('pgt_user_')) {
+                    let user = JSON.parse(localStorage.getItem(key));
+                    count++;
+                    let row = `<tr>
+                        <td>${user.name}</td>
+                        <td>${user.address}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.whatsapp}</td>
+                        <td>${user.email}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                }
+            }
+
+            if (count === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #777;">No customer accounts registered yet.</td></tr>`;
+            }
         }
     </script>
 
