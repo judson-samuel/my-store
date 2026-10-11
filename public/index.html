@@ -12,6 +12,7 @@
             padding: 0 0 70px 0;
             background-color: #f8f9fa;
             color: #333;
+            scroll-behavior: smooth;
         }
         header {
             display: flex;
@@ -176,6 +177,8 @@
             font-weight: 500;
         }
         .cart-badge-container span { color: #111; font-weight: bold; }
+        
+        /* Bottom Navigation Bar */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -195,9 +198,70 @@
             color: #666;
             text-decoration: none;
             cursor: pointer;
+            background: none;
+            border: none;
+            outline: none;
+            font-family: inherit;
         }
         .nav-item.active { color: #111; font-weight: bold; }
         .nav-item div:first-child { font-size: 18px; margin-bottom: 2px; }
+
+        /* Login Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .modal-input {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+        .modal-submit-btn {
+            width: 100%;
+            background: #111;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #777;
+        }
     </style>
 </head>
 <body>
@@ -235,7 +299,7 @@
         <div>Total Amount: ₹<span id="total-price">0.00</span></div>
     </div>
 
-    <div class="section-title">Trending Collection</div>
+    <div class="section-title" id="products-section">Trending Collection</div>
 
     <div class="products-grid" id="products-grid">
         <div class="product-card" data-category="Oversize T-Shirt">
@@ -314,19 +378,31 @@
         </div>
     </div>
 
+    <!-- Login Pop-up Modal -->
+    <div class="modal-overlay" id="login-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="toggleLoginModal(false)">✕</button>
+            <div class="modal-title">Login to PGT</div>
+            <input type="email" class="modal-input" placeholder="Enter your email">
+            <input type="password" class="modal-input" placeholder="Enter your password">
+            <button class="modal-submit-btn" onclick="alert('Login successful!'); toggleLoginModal(false);">Login</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
-        <a class="nav-item active">
+        <button class="nav-item active" onclick="goHome()">
             <div>🏠</div>
             <div>Home</div>
-        </a>
-        <a class="nav-item">
+        </button>
+        <button class="nav-item" onclick="scrollToProducts()">
             <div>🛍️</div>
             <div>Products</div>
-        </a>
-        <a class="nav-item">
+        </button>
+        <button class="nav-item" onclick="toggleLoginModal(true)">
             <div>👤</div>
             <div>Login</div>
-        </a>
+        </button>
     </div>
 
     <script>
@@ -344,12 +420,9 @@
 
         function filterCategory(category, buttonElement) {
             currentCategory = category;
-            
-            // Update active button styling
-            let buttons = document.querySelectorAll('.category-btn');
+            let buttons = document.querySelectorAll('.categories .category-btn');
             buttons.forEach(btn => btn.classList.remove('active'));
             buttonElement.classList.add('active');
-
             applyFilters();
         }
 
@@ -374,6 +447,23 @@
                     product.style.display = 'none';
                 }
             });
+        }
+
+        function goHome() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('search-input').value = '';
+            // Reset to 'All' category
+            let allBtn = document.querySelector('.categories .category-btn');
+            filterCategory('All', allBtn);
+        }
+
+        function scrollToProducts() {
+            document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleLoginModal(show) {
+            let modal = document.getElementById('login-modal');
+            modal.style.display = show ? 'flex' : 'none';
         }
     </script>
 
