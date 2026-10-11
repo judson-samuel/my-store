@@ -127,16 +127,21 @@
             margin: 0 0 4px 0;
             color: #222;
         }
-        .product-weight {
-            font-size: 12px;
-            color: #777;
+        .size-selector {
+            width: 100%;
+            padding: 6px;
             margin-bottom: 8px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+            background: #f9f9f9;
+            outline: none;
         }
         .price-row {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .current-price {
             color: #111;
@@ -433,12 +438,18 @@
             </div>
             <div class="product-details">
                 <div class="product-title">Oversized Streetwear Tee</div>
-                <div class="product-weight">👕 Size: M, L, XL</div>
+                <select class="size-selector" id="size-tee">
+                    <option value="S">Size: S</option>
+                    <option value="M" selected>Size: M</option>
+                    <option value="L">Size: L</option>
+                    <option value="XL">Size: XL</option>
+                    <option value="XXL">Size: XXL</option>
+                </select>
                 <div class="price-row">
                     <span class="current-price">₹699</span>
                     <span class="original-price">₹1,299</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart('Oversized Streetwear Tee', 699)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Oversized Streetwear Tee', 699, 'size-tee')">🛒 Add Cart</button>
             </div>
         </div>
 
@@ -448,12 +459,18 @@
             </div>
             <div class="product-details">
                 <div class="product-title">Classic Black Hoodie</div>
-                <div class="product-weight">🧥 Fleece Winter Wear</div>
+                <select class="size-selector" id="size-hoodie">
+                    <option value="S">Size: S</option>
+                    <option value="M" selected>Size: M</option>
+                    <option value="L">Size: L</option>
+                    <option value="XL">Size: XL</option>
+                    <option value="XXL">Size: XXL</option>
+                </select>
                 <div class="price-row">
                     <span class="current-price">₹1,199</span>
                     <span class="original-price">₹1,999</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart('Classic Black Hoodie', 1199)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Classic Black Hoodie', 1199, 'size-hoodie')">🛒 Add Cart</button>
             </div>
         </div>
 
@@ -463,12 +480,18 @@
             </div>
             <div class="product-details">
                 <div class="product-title">Pro Esports Gaming Jersey</div>
-                <div class="product-weight">⚡ Dry-Fit Material</div>
+                <select class="size-selector" id="size-jersey">
+                    <option value="S">Size: S</option>
+                    <option value="M" selected>Size: M</option>
+                    <option value="L">Size: L</option>
+                    <option value="XL">Size: XL</option>
+                    <option value="XXL">Size: XXL</option>
+                </select>
                 <div class="price-row">
                     <span class="current-price">₹549</span>
                     <span class="original-price">₹999</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart('Pro Esports Gaming Jersey', 549)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Pro Esports Gaming Jersey', 549, 'size-jersey')">🛒 Add Cart</button>
             </div>
         </div>
 
@@ -478,12 +501,18 @@
             </div>
             <div class="product-details">
                 <div class="product-title">Casual Linen Shirt</div>
-                <div class="product-weight">👔 Breathable Fabric</div>
+                <select class="size-selector" id="size-shirt">
+                    <option value="S">Size: S</option>
+                    <option value="M" selected>Size: M</option>
+                    <option value="L">Size: L</option>
+                    <option value="XL">Size: XL</option>
+                    <option value="XXL">Size: XXL</option>
+                </select>
                 <div class="price-row">
                     <span class="current-price">₹849</span>
                     <span class="original-price">₹1,499</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart('Casual Linen Shirt', 849)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Casual Linen Shirt', 849, 'size-shirt')">🛒 Add Cart</button>
             </div>
         </div>
 
@@ -493,12 +522,18 @@
             </div>
             <div class="product-details">
                 <div class="product-title">Cargo Jogger Pants</div>
-                <div class="product-weight">👖 Streetwear Fit</div>
+                <select class="size-selector" id="size-pant">
+                    <option value="28">Size: 28</option>
+                    <option value="30" selected>Size: 30</option>
+                    <option value="32">Size: 32</option>
+                    <option value="34">Size: 34</option>
+                    <option value="36">Size: 36</option>
+                </select>
                 <div class="price-row">
                     <span class="current-price">₹999</span>
                     <span class="original-price">₹1,799</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart('Cargo Jogger Pants', 999)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Cargo Jogger Pants', 999, 'size-pant')">🛒 Add Cart</button>
             </div>
         </div>
     </div>
@@ -573,7 +608,7 @@
         const ADMIN_EMAIL = "zenoclothing2026@gmail.com";
         const ADMIN_PASS = "zeno@2026";
         
-        // Your exact UPI ID configured for instant app checkout
+        // Your exact UPI ID for instant app checkout
         const STORE_UPI_ID = "ebineshebinesh2007@oksbi"; 
         const STORE_NAME = "Zeno Clothing";
 
@@ -587,8 +622,11 @@
             }
         };
 
-        function addToCart(title, price) {
-            cartItems.push({ title, price });
+        function addToCart(title, price, sizeSelectId) {
+            let sizeDropdown = document.getElementById(sizeSelectId);
+            let selectedSize = sizeDropdown ? sizeDropdown.value : 'M';
+            
+            cartItems.push({ title, price, size: selectedSize });
             updateCartUI();
         }
 
@@ -610,7 +648,7 @@
 
             cartItems.forEach((item, index) => {
                 container.innerHTML += `<div class="cart-item-row">
-                    <span>${item.title}</span>
+                    <span>${item.title} (Size: <b>${item.size}</b>)</span>
                     <span>₹${item.price} <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer; margin-left:8px;">✕</button></span>
                 </div>`;
             });
@@ -647,16 +685,20 @@
             // Open UPI App
             window.location.href = upiLink;
 
-            // Also open WhatsApp to send order confirmation details to admin
+            // Format clean order receipt for WhatsApp admin notification
             let userObj = JSON.parse(loggedUser);
-            let orderText = `*New Paid Order - ZENO CLOTHING*%0A` +
+            let itemListFormatted = cartItems.map(i => `• ${i.title} [Size: ${i.size}] - ₹${i.price}`).join('%0A');
+            
+            let orderText = `*New Paid Order - ZENO CLOTHING*%0A%0A` +
+                            `*Customer Details:*%0A` +
                             `Name: ${userObj.name}%0A` +
                             `Phone: ${userObj.phone}%0A` +
-                            `Address: ${userObj.address}%0A` +
-                            `Total Paid: ₹${totalPrice}%0A%0A` +
-                            `Items: ` + cartItems.map(i => i.title).join(', ');
+                            `WhatsApp: ${userObj.whatsapp}%0A` +
+                            `Delivery Address: ${userObj.address}%0A%0A` +
+                            `*Ordered Items:*%0A` + itemListFormatted + `%0A%0A` +
+                            `*Total Paid:* ₹${totalPrice}`;
 
-            let adminWhatsApp = "919842424242"; // Replace with your WhatsApp number
+            let adminWhatsApp = "919842424242"; // Replace with your WhatsApp number if needed
             setTimeout(() => {
                 window.open(`https://wa.me/${adminWhatsApp}?text=${orderText}`, '_blank');
                 cartItems = [];
