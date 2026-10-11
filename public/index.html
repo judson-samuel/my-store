@@ -332,15 +332,23 @@
             margin-top: 10px;
             font-weight: bold;
         }
+        .logout-link {
+            font-size: 11px;
+            color: #d32f2f;
+            cursor: pointer;
+            margin-top: 2px;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="menu-icon" onclick="checkAdminAccess()">☰</div>
+        <div class="menu-icon" onclick="toggleAdminPanel()">☰</div>
         <div class="logo-area">
             <div class="logo-title">ZENO CLOTHING</div>
             <div id="header-user-display" class="user-greeting"></div>
+            <div id="header-logout" class="logout-link" onclick="handleLogout()" style="display:none;">Logout</div>
         </div>
         <div class="cart-icon">🛒<span id="cart-count-badge" style="font-size: 12px; background: red; color: white; border-radius: 50%; padding: 2px 6px; vertical-align: top;">0</span></div>
     </header>
@@ -525,11 +533,15 @@
         let totalPrice = 0;
         let currentCategory = 'All';
 
+        const ADMIN_EMAIL = "zenoclothing2026@gmail.com";
+        const ADMIN_PASS = "zeno@2026";
+
         window.onload = function() {
             let loggedUser = localStorage.getItem('zeno_logged_user');
             if (loggedUser) {
                 let userObj = JSON.parse(loggedUser);
                 document.getElementById('header-user-display').innerText = `Hello, ${userObj.name}`;
+                document.getElementById('header-logout').style.display = 'block';
                 document.getElementById('nav-login-label').innerText = 'Account';
             }
         };
@@ -625,6 +637,12 @@
                 return;
             }
 
+            if (email === ADMIN_EMAIL) {
+                statusEl.style.color = 'red';
+                statusEl.innerText = 'This email is reserved for Admin.';
+                return;
+            }
+
             let userData = { name, address, phone, whatsapp, email, password };
             localStorage.setItem('zeno_user_' + email, JSON.stringify(userData));
             localStorage.setItem('zeno_logged_user', JSON.stringify(userData));
@@ -632,6 +650,7 @@
             statusEl.style.color = 'green';
             statusEl.innerText = 'Account created successfully!';
             document.getElementById('header-user-display').innerText = `Hello, ${name}`;
+            document.getElementById('header-logout').style.display = 'block';
             document.getElementById('nav-login-label').innerText = 'Account';
             
             setTimeout(() => {
@@ -643,6 +662,23 @@
             let email = document.getElementById('login-email').value.trim();
             let password = document.getElementById('login-password').value.trim();
             let statusEl = document.getElementById('login-status');
+
+            // Check if Admin Login
+            if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
+                let adminObj = { name: "Admin", email: ADMIN_EMAIL };
+                localStorage.setItem('zeno_logged_user', JSON.stringify(adminObj));
+                statusEl.style.color = 'green';
+                statusEl.innerText = 'Admin Login successful!';
+                document.getElementById('header-user-display').innerText = `Hello, Admin`;
+                document.getElementById('header-logout').style.display = 'block';
+                document.getElementById('nav-login-label').innerText = 'Account';
+
+                setTimeout(() => {
+                    toggleLoginModal(false);
+                    toggleAdminPanel(); // Automatically open admin panel on admin login
+                }, 1000);
+                return;
+            }
 
             let savedUserStr = localStorage.getItem('zeno_user_' + email);
             if (!savedUserStr) {
@@ -662,6 +698,7 @@
             statusEl.style.color = 'green';
             statusEl.innerText = 'Login successful!';
             document.getElementById('header-user-display').innerText = `Hello, ${userObj.name}`;
+            document.getElementById('header-logout').style.display = 'block';
             document.getElementById('nav-login-label').innerText = 'Account';
 
             setTimeout(() => {
@@ -669,16 +706,29 @@
             }, 1200);
         }
 
-        function checkAdminAccess() {
-            let passcode = prompt("Enter Admin Passcode:");
-            if (passcode === "zenoadmin2026") {
-                toggleAdminPanel();
-            } else if (passcode !== null) {
-                alert("Incorrect passcode! Access denied.");
-            }
+        function handleLogout() {
+            localStorage.removeItem('zeno_logged_user');
+            document.getElementById('header-user-display').innerText = '';
+            document.getElementById('header-logout').style.display = 'none';
+            document.getElementById('nav-login-label').innerText = 'Login';
+            document.getElementById('admin-panel').style.display = 'none';
+            alert('Logged out successfully.');
         }
 
         function toggleAdminPanel() {
+            let loggedUser = localStorage.getItem('zeno_logged_user');
+            if (!loggedUser) {
+                alert("Please log in first.");
+                toggleLoginModal(true);
+                return;
+            }
+
+            let userObj = JSON.parse(loggedUser);
+            if (userObj.email !== ADMIN_EMAIL) {
+                alert("Access Denied! You are not authorized as Admin.");
+                return;
+            }
+
             let panel = document.getElementById('admin-panel');
             if (panel.style.display === 'block') {
                 panel.style.display = 'none';
