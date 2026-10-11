@@ -339,7 +339,7 @@
     <header>
         <div class="menu-icon" onclick="checkAdminAccess()">☰</div>
         <div class="logo-area">
-            <div class="logo-title">ZENO CLOTHINGS</div>
+            <div class="logo-title">ZENO CLOTHING</div>
             <div id="header-user-display" class="user-greeting"></div>
         </div>
         <div class="cart-icon">🛒<span id="cart-count-badge" style="font-size: 12px; background: red; color: white; border-radius: 50%; padding: 2px 6px; vertical-align: top;">0</span></div>
@@ -560,4 +560,161 @@
 
             products.forEach(product => {
                 let category = product.getAttribute('data-category');
-                let title = product.querySelector('.product-title').innerText.
+                let title = product.querySelector('.product-title').innerText.toLowerCase();
+
+                let matchesCategory = (currentCategory === 'All' || category === currentCategory);
+                let matchesSearch = title.includes(searchQuery);
+
+                if (matchesCategory && matchesSearch) {
+                    product.style.display = 'flex';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+
+        function goHome() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('search-input').value = '';
+            let allBtn = document.querySelector('.categories .category-btn');
+            filterCategory('All', allBtn);
+        }
+
+        function scrollToProducts() {
+            document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleLoginModal(show) {
+            let modal = document.getElementById('login-modal');
+            modal.style.display = show ? 'flex' : 'none';
+            document.getElementById('login-status').innerText = '';
+            document.getElementById('reg-status').innerText = '';
+        }
+
+        function switchTab(tab) {
+            let loginTab = document.getElementById('login-tab-btn');
+            let regTab = document.getElementById('register-tab-btn');
+            let loginSec = document.getElementById('login-section');
+            let regSec = document.getElementById('register-section');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                regTab.classList.remove('active');
+                loginSec.classList.add('active');
+                regSec.classList.remove('active');
+            } else {
+                regTab.classList.add('active');
+                loginTab.classList.remove('active');
+                regSec.classList.add('active');
+                loginSec.classList.remove('active');
+            }
+        }
+
+        function handleRegister() {
+            let name = document.getElementById('reg-name').value.trim();
+            let address = document.getElementById('reg-address').value.trim();
+            let phone = document.getElementById('reg-phone').value.trim();
+            let whatsapp = document.getElementById('reg-whatsapp').value.trim();
+            let email = document.getElementById('reg-email').value.trim();
+            let password = document.getElementById('reg-password').value.trim();
+            let statusEl = document.getElementById('reg-status');
+
+            if (!name || !address || !phone || !whatsapp || !email || !password) {
+                statusEl.style.color = 'red';
+                statusEl.innerText = 'Please fill in all details.';
+                return;
+            }
+
+            let userData = { name, address, phone, whatsapp, email, password };
+            localStorage.setItem('zeno_user_' + email, JSON.stringify(userData));
+            localStorage.setItem('zeno_logged_user', JSON.stringify(userData));
+
+            statusEl.style.color = 'green';
+            statusEl.innerText = 'Account created successfully!';
+            document.getElementById('header-user-display').innerText = `Hello, ${name}`;
+            document.getElementById('nav-login-label').innerText = 'Account';
+            
+            setTimeout(() => {
+                toggleLoginModal(false);
+            }, 1200);
+        }
+
+        function handleLogin() {
+            let email = document.getElementById('login-email').value.trim();
+            let password = document.getElementById('login-password').value.trim();
+            let statusEl = document.getElementById('login-status');
+
+            let savedUserStr = localStorage.getItem('zeno_user_' + email);
+            if (!savedUserStr) {
+                statusEl.style.color = 'red';
+                statusEl.innerText = 'Account not found. Please register.';
+                return;
+            }
+
+            let userObj = JSON.parse(savedUserStr);
+            if (userObj.password !== password) {
+                statusEl.style.color = 'red';
+                statusEl.innerText = 'Incorrect password.';
+                return;
+            }
+
+            localStorage.setItem('zeno_logged_user', JSON.stringify(userObj));
+            statusEl.style.color = 'green';
+            statusEl.innerText = 'Login successful!';
+            document.getElementById('header-user-display').innerText = `Hello, ${userObj.name}`;
+            document.getElementById('nav-login-label').innerText = 'Account';
+
+            setTimeout(() => {
+                toggleLoginModal(false);
+            }, 1200);
+        }
+
+        function checkAdminAccess() {
+            let passcode = prompt("Enter Admin Passcode:");
+            if (passcode === "zenoadmin2026") {
+                toggleAdminPanel();
+            } else if (passcode !== null) {
+                alert("Incorrect passcode! Access denied.");
+            }
+        }
+
+        function toggleAdminPanel() {
+            let panel = document.getElementById('admin-panel');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+                loadAdminCustomers();
+                panel.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function loadAdminCustomers() {
+            let tbody = document.getElementById('customer-table-body');
+            tbody.innerHTML = '';
+            let count = 0;
+
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                if (key.startsWith('zeno_user_')) {
+                    let user = JSON.parse(localStorage.getItem(key));
+                    count++;
+                    let row = `<tr>
+                        <td>${user.name}</td>
+                        <td>${user.address}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.whatsapp}</td>
+                        <td>${user.email}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                }
+            }
+
+            if (count === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #777;">No customer accounts registered yet.</td></tr>`;
+            }
+        }
+    </script>
+
+</body>
+</html>
