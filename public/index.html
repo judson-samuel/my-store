@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kodai Hill Spot | Premium Homemade Products</title>
+    <title>PGT Outfits | Premium Clothing & Apparel</title>
     <style>
         * { box-sizing: border-box; }
         body {
@@ -23,8 +23,7 @@
         }
         .menu-icon, .cart-icon { font-size: 22px; cursor: pointer; }
         .logo-area { text-align: center; }
-        .logo-title { font-size: 14px; font-weight: bold; color: #555; margin-top: 2px; }
-        .symbols { font-size: 12px; color: #666; margin-bottom: 2px; }
+        .logo-title { font-size: 18px; font-weight: bold; color: #111; margin-top: 2px; letter-spacing: 0.5px; }
         .hero-banner {
             width: 100%;
             max-height: 250px;
@@ -77,7 +76,7 @@
             font-weight: 500;
         }
         .category-btn.active {
-            background: #2e7d32;
+            background: #111;
             color: white;
         }
         .section-title {
@@ -109,7 +108,7 @@
         }
         .product-img-container {
             width: 100%;
-            height: 140px;
+            height: 160px;
             background: #f1f3f5;
             position: relative;
         }
@@ -124,7 +123,7 @@
         .product-title {
             font-size: 14px;
             font-weight: 600;
-            margin: 0 0 6px 0;
+            margin: 0 0 4px 0;
             color: #222;
         }
         .product-weight {
@@ -139,7 +138,7 @@
             margin-bottom: 12px;
         }
         .current-price {
-            color: #2e7d32;
+            color: #111;
             font-weight: bold;
             font-size: 16px;
         }
@@ -149,7 +148,7 @@
             font-size: 12px;
         }
         .add-to-cart-btn {
-            background-color: #2e7d32;
+            background-color: #111;
             color: white;
             border: none;
             width: 100%;
@@ -163,20 +162,20 @@
             justify-content: center;
             gap: 6px;
         }
-        .add-to-cart-btn:hover { background-color: #1b5e20; }
+        .add-to-cart-btn:hover { background-color: #333; }
         .cart-badge-container {
             background: #fff;
             margin: 15px 20px;
             padding: 12px 15px;
             border-radius: 8px;
-            border: 1px solid #c8e6c9;
+            border: 1px solid #ddd;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 14px;
             font-weight: 500;
         }
-        .cart-badge-container span { color: #2e7d32; font-weight: bold; }
+        .cart-badge-container span { color: #111; font-weight: bold; }
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -197,7 +196,7 @@
             text-decoration: none;
             cursor: pointer;
         }
-        .nav-item.active { color: #2e7d32; font-weight: bold; }
+        .nav-item.active { color: #111; font-weight: bold; }
         .nav-item div:first-child { font-size: 18px; margin-bottom: 2px; }
     </style>
 </head>
@@ -206,33 +205,29 @@
     <header>
         <div class="menu-icon">☰</div>
         <div class="logo-area">
-            <div class="symbols">† ॐ ☪</div>
-            <div class="logo-title">Kodai Hill Spot</div>
+            <div class="logo-title">PGT Outfits</div>
         </div>
         <div class="cart-icon">🛒<span id="cart-count-badge" style="font-size: 12px; background: red; color: white; border-radius: 50%; padding: 2px 6px; vertical-align: top;">0</span></div>
     </header>
 
     <div class="hero-banner">
-        <img src="https://m.media-amazon.com/images/I/81w8X4W3PBL._AC_SL1500_.jpg" alt="Hero Banner">
+        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80" alt="Hero Banner">
     </div>
 
     <div class="search-container">
         <div class="search-box">
             <span>🔍</span>
-            <input type="text" placeholder="Search products">
+            <input type="text" placeholder="Search apparel...">
         </div>
     </div>
 
     <div class="categories">
         <button class="category-btn active">All</button>
-        <button class="category-btn">Organic Products</button>
-        <button class="category-btn">Fruits</button>
-        <button class="category-btn">Oils</button>
-        <button class="category-btn">Honey</button>
-        <button class="category-btn">Herbs</button>
-        <button class="category-btn">Vegetable's</button>
-        <button class="category-btn">Personal Care</button>
-        <button class="category-btn">Chocolate</button>
+        <button class="category-btn">Jersey</button>
+        <button class="category-btn">Shirt</button>
+        <button class="category-btn">Pant</button>
+        <button class="category-btn">Hoodie</button>
+        <button class="category-btn">Oversize T-Shirt</button>
     </div>
 
     <div class="cart-badge-container">
@@ -240,35 +235,66 @@
         <div>Total Amount: ₹<span id="total-price">0.00</span></div>
     </div>
 
-    <div class="section-title">Products</div>
+    <div class="section-title">Trending Collection</div>
 
     <div class="products-grid">
         <div class="product-card">
             <div class="product-img-container">
-                <img src="https://m.media-amazon.com/images/I/61mX90K66xL._AC_UX679_.jpg" alt="Coffee Powder">
+                <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80" alt="Oversize T-Shirt">
             </div>
             <div class="product-details">
-                <div class="product-title">Coffee Powder</div>
-                <div class="product-weight">📦 250g</div>
+                <div class="product-title">Oversized Streetwear Tee</div>
+                <div class="product-weight">👕 Size: M, L, XL</div>
                 <div class="price-row">
-                    <span class="current-price">₹249</span>
+                    <span class="current-price">₹699</span>
+                    <span class="original-price">₹1,299</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart(249)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart(699)">🛒 Add Cart</button>
             </div>
         </div>
 
         <div class="product-card">
             <div class="product-img-container">
-                <img src="https://m.media-amazon.com/images/I/71E6hH3W+yL._AC_SX679_.jpg" alt="Coffee Powder">
+                <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=500&q=80" alt="Hoodie">
             </div>
             <div class="product-details">
-                <div class="product-title">Coffee Powder</div>
-                <div class="product-weight">📦 500g</div>
+                <div class="product-title">Classic Black Hoodie</div>
+                <div class="product-weight">🧥 Fleece Winter Wear</div>
                 <div class="price-row">
-                    <span class="current-price">₹449</span>
-                    <span class="original-price">₹500</span>
+                    <span class="current-price">₹1,199</span>
+                    <span class="original-price">₹1,999</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart(449)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart(1199)">🛒 Add Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=500&q=80" alt="Jersey">
+            </div>
+            <div class="product-details">
+                <div class="product-title">Pro Esports Gaming Jersey</div>
+                <div class="product-weight">⚡ Dry-Fit Material</div>
+                <div class="price-row">
+                    <span class="current-price">₹549</span>
+                    <span class="original-price">₹999</span>
+                </div>
+                <button class="add-to-cart-btn" onclick="addToCart(549)">🛒 Add Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container">
+                <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=500&q=80" alt="Shirt">
+            </div>
+            <div class="product-details">
+                <div class="product-title">Casual Linen Shirt</div>
+                <div class="product-weight">👔 Breathable Fabric</div>
+                <div class="price-row">
+                    <span class="current-price">₹849</span>
+                    <span class="original-price">₹1,499</span>
+                </div>
+                <button class="add-to-cart-btn" onclick="addToCart(849)">🛒 Add Cart</button>
             </div>
         </div>
     </div>
