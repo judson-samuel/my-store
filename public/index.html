@@ -3,135 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Store</title>
+    <title>Kodai Hill Spot | Premium Homemade Products</title>
     <style>
-        /* --- Website Styling --- */
+        * { box-sizing: border-box; }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
-            /* Changed background color from plain white to a light teal */
-            background-color: #e0f7fa;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #006064; /* Darker teal for header text */
-        }
-
-        /* Styling for the Shopping Cart Summary Box */
-        .cart-summary {
-            background-color: #ffffff; /* White box to make it pop */
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 400px;
-            margin: 0 auto 30px auto;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow */
-            border: 2px solid #00838f;
-        }
-
-        .cart-summary h3 { margin-top: 0; color: #00838f; }
-
-        /* --- Product Grid Styling --- */
-        .products {
-            display: flex;
-            gap: 30px; /* Space between cards */
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Styling for individual Product Cards */
-        .product-card {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 220px; /* Fixed width for uniform cards */
-            text-align: center;
-            transition: transform 0.3s ease; /* Adds a smooth hover effect */
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px); /* Lifts card slightly on hover */
-        }
-
-        /* Image Styling within the card */
-        .product-card img {
-            width: 100%; /* Stretches image to fit card width */
-            height: 180px; /* Fixed height */
-            object-fit: contain; /* Ensures image is fully visible without stretching */
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .product-card h3 {
-            margin: 10px 0;
-            font-size: 1.2em;
+            padding: 0 0 70px 0;
+            background-color: #f8f9fa;
             color: #333;
         }
-
-        .price {
-            color: #2e7d32; /* Green color for price */
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 10px;
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
         }
-
-        /* Button Styling */
-        button {
-            background-color: #00838f; /* Teal button color */
+        .menu-icon, .cart-icon { font-size: 22px; cursor: pointer; }
+        .logo-area { text-align: center; }
+        .logo-title { font-size: 14px; font-weight: bold; color: #555; margin-top: 2px; }
+        .symbols { font-size: 12px; color: #666; margin-bottom: 2px; }
+        .hero-banner {
+            width: 100%;
+            max-height: 250px;
+            overflow: hidden;
+            background: #ddd;
+        }
+        .hero-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .search-container {
+            padding: 15px 20px;
+            background: #fff;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f1f3f5;
+            border-radius: 25px;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+        }
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+        .categories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 20px;
+            background: #fff;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .categories::-webkit-scrollbar { display: none; }
+        .category-btn {
+            background: #f1f3f5;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            color: #333;
+            font-weight: 500;
+        }
+        .category-btn.active {
+            background: #2e7d32;
+            color: white;
+        }
+        .section-title {
+            padding: 15px 20px 5px 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .products-grid {
+            display: flex;
+            gap: 15px;
+            padding: 10px 20px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            width: calc(50% - 8px);
+            max-width: 250px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #eee;
+        }
+        @media(min-width: 768px) {
+            .product-card { width: calc(25% - 12px); }
+        }
+        .product-img-container {
+            width: 100%;
+            height: 140px;
+            background: #f1f3f5;
+            position: relative;
+        }
+        .product-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-details {
+            padding: 12px;
+        }
+        .product-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 0 6px 0;
+            color: #222;
+        }
+        .product-weight {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 8px;
+        }
+        .price-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .current-price {
+            color: #2e7d32;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .original-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 12px;
+        }
+        .add-to-cart-btn {
+            background-color: #2e7d32;
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
-
-        button:hover {
-            background-color: #006064; /* Darker teal on hover */
+        .add-to-cart-btn:hover { background-color: #1b5e20; }
+        .cart-badge-container {
+            background: #fff;
+            margin: 15px 20px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #c8e6c9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 500;
         }
+        .cart-badge-container span { color: #2e7d32; font-weight: bold; }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nav-item.active { color: #2e7d32; font-weight: bold; }
+        .nav-item div:first-child { font-size: 18px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Welcome to My Colorful Online Store!</h1>
-        <p>Browse our products and shop online.</p>
+        <div class="menu-icon">☰</div>
+        <div class="logo-area">
+            <div class="symbols">† ॐ ☪</div>
+            <div class="logo-title">Kodai Hill Spot</div>
+        </div>
+        <div class="cart-icon">🛒<span id="cart-count-badge" style="font-size: 12px; background: red; color: white; border-radius: 50%; padding: 2px 6px; vertical-align: top;">0</span></div>
     </header>
 
-    <!-- Shopping Cart Summary Section -->
-    <div class="cart-summary">
-        <h3>My Shopping Cart</h3>
-        <p>Items Selected: <span id="item-count">0</span></p>
-        <p>Total Amount: $<span id="total-price">0.00</span></p>
+    <div class="hero-banner">
+        <img src="https://m.media-amazon.com/images/I/81w8X4W3PBL._AC_SL1500_.jpg" alt="Hero Banner">
     </div>
 
-    <!-- Product Listing Section -->
-    <div class="products">
-        <!-- Product 1: Cool T-Shirt -->
-        <div class="product-card">
-            <!-- REPLACEMENT STEP: Put your image URL here -->
-            <img src="https://m.media-amazon.com/images/I/61mX90K66xL._AC_UX679_.jpg" alt="Cool T-Shirt">
-            <h3>Cool T-Shirt</h3>
-            <p class="price">$19.99</p>
-            <button onclick="addToCart(19.99)">Add to Cart</button>
-        </div>
-
-        <!-- Product 2: Smart Watch -->
-        <div class="product-card">
-            <!-- REPLACEMENT STEP: Put your image URL here -->
-            <img src="https://m.media-amazon.com/images/I/71E6hH3W+yL._AC_SX679_.jpg" alt="Smart Watch">
-            <h3>Smart Watch</h3>
-            <p class="price">$49.99</p>
-            <button onclick="addToCart(49.99)">Add to Cart</button>
+    <div class="search-container">
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="Search products">
         </div>
     </div>
 
-    <!-- JavaScript for Cart Functionality -->
+    <div class="categories">
+        <button class="category-btn active">All</button>
+        <button class="category-btn">Organic Products</button>
+        <button class="category-btn">Fruits</button>
+        <button class="category-btn">Oils</button>
+        <button class="category-btn">Honey</button>
+        <button class="category-btn">Herbs</button>
+        <button class="category-btn">Vegetable's</button>
+        <button class="category-btn">Personal Care</button>
+        <button class="category-btn">Chocolate</button>
+    </div>
+
+    <div class="cart-badge-container">
+        <div>Items in Cart: <span id="item-count">0</span></div>
+        <div>Total Amount: ₹<span id="total-price">0.00</span></div>
+    </div>
+
+    <div class="section-title">Products</div>
+
+    <div class="products-grid">
+        <div class="product-card">
+            <div class="product-img-container">
+                <img src="https://m.media-amazon.com/images/I/61mX90K66xL._AC_UX679_.jpg" alt="Coffee Powder">
+            </div>
+            <div class="product-details">
+                <div class="product-title">Coffee Powder</div>
+                <div class="product-weight">📦 250g</div>
+                <div class="price-row">
+                    <span class="current-price">₹249</span>
+                </div>
+                <button class="add-to-cart-btn" onclick="addToCart(249)">🛒 Add Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img-container">
+                <img src="https://m.media-amazon.com/images/I/71E6hH3W+yL._AC_SX679_.jpg" alt="Coffee Powder">
+            </div>
+            <div class="product-details">
+                <div class="product-title">Coffee Powder</div>
+                <div class="product-weight">📦 500g</div>
+                <div class="price-row">
+                    <span class="current-price">₹449</span>
+                    <span class="original-price">₹500</span>
+                </div>
+                <button class="add-to-cart-btn" onclick="addToCart(449)">🛒 Add Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a class="nav-item active">
+            <div>🏠</div>
+            <div>Home</div>
+        </a>
+        <a class="nav-item">
+            <div>🛍️</div>
+            <div>Products</div>
+        </a>
+        <a class="nav-item">
+            <div>👤</div>
+            <div>Login</div>
+        </a>
+    </div>
+
     <script>
         let totalCount = 0;
         let totalPrice = 0;
@@ -140,7 +296,7 @@
             totalCount += 1;
             totalPrice += price;
             document.getElementById('item-count').innerText = totalCount;
-            // toFixed(2) ensures it always shows 2 decimal places for currency
+            document.getElementById('cart-count-badge').innerText = totalCount;
             document.getElementById('total-price').innerText = totalPrice.toFixed(2);
         }
     </script>
