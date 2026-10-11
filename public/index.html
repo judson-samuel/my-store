@@ -287,6 +287,12 @@
         .form-section { display: none; }
         .form-section.active { display: block; }
         .user-greeting { font-size: 12px; color: #444; font-weight: bold; }
+        .status-msg {
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -420,6 +426,7 @@
                 <input type="email" id="login-email" class="modal-input" placeholder="Mail ID">
                 <input type="password" id="login-password" class="modal-input" placeholder="Password">
                 <button class="modal-submit-btn" onclick="handleLogin()">Login</button>
+                <div id="login-status" class="status-msg"></div>
             </div>
 
             <!-- Register Form -->
@@ -431,6 +438,7 @@
                 <input type="email" id="reg-email" class="modal-input" placeholder="Mail ID">
                 <input type="password" id="reg-password" class="modal-input" placeholder="Create Password">
                 <button class="modal-submit-btn" onclick="handleRegister()">Register Account</button>
+                <div id="reg-status" class="status-msg"></div>
             </div>
         </div>
     </div>
@@ -518,6 +526,8 @@
         function toggleLoginModal(show) {
             let modal = document.getElementById('login-modal');
             modal.style.display = show ? 'flex' : 'none';
+            document.getElementById('login-status').innerText = '';
+            document.getElementById('reg-status').innerText = '';
         }
 
         function switchTab(tab) {
@@ -546,9 +556,11 @@
             let whatsapp = document.getElementById('reg-whatsapp').value.trim();
             let email = document.getElementById('reg-email').value.trim();
             let password = document.getElementById('reg-password').value.trim();
+            let statusEl = document.getElementById('reg-status');
 
             if (!name || !address || !phone || !whatsapp || !email || !password) {
-                alert('Please fill in all the details to register your account.');
+                statusEl.style.color = 'red';
+                statusEl.innerText = 'Please fill in all details.';
                 return;
             }
 
@@ -556,33 +568,44 @@
             localStorage.setItem('pgt_user_' + email, JSON.stringify(userData));
             localStorage.setItem('pgt_logged_user', JSON.stringify(userData));
 
-            alert('Account created successfully!');
+            statusEl.style.color = 'green';
+            statusEl.innerText = 'Account created successfully!';
             document.getElementById('header-user-display').innerText = `Hello, ${name}`;
             document.getElementById('nav-login-label').innerText = 'Account';
-            toggleLoginModal(false);
+            
+            setTimeout(() => {
+                toggleLoginModal(false);
+            }, 1200);
         }
 
         function handleLogin() {
             let email = document.getElementById('login-email').value.trim();
             let password = document.getElementById('login-password').value.trim();
+            let statusEl = document.getElementById('login-status');
 
             let savedUserStr = localStorage.getItem('pgt_user_' + email);
             if (!savedUserStr) {
-                alert('No account found with this Mail ID. Please register first.');
+                statusEl.style.color = 'red';
+                statusEl.innerText = 'Account not found. Please register.';
                 return;
             }
 
             let userObj = JSON.parse(savedUserStr);
             if (userObj.password !== password) {
-                alert('Incorrect password. Please try again.');
+                statusEl.style.color = 'red';
+                statusEl.innerText = 'Incorrect password.';
                 return;
             }
 
             localStorage.setItem('pgt_logged_user', JSON.stringify(userObj));
-            alert('Login successful!');
+            statusEl.style.color = 'green';
+            statusEl.innerText = 'Login successful!';
             document.getElementById('header-user-display').innerText = `Hello, ${userObj.name}`;
             document.getElementById('nav-login-label').innerText = 'Account';
-            toggleLoginModal(false);
+
+            setTimeout(() => {
+                toggleLoginModal(false);
+            }, 1200);
         }
     </script>
 
