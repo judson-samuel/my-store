@@ -206,7 +206,7 @@
         .nav-item.active { color: #111; font-weight: bold; }
         .nav-item div:first-child { font-size: 18px; margin-bottom: 2px; }
 
-        /* Login Modal Styles */
+        /* Login/Register Modal Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -222,9 +222,11 @@
             padding: 25px;
             border-radius: 12px;
             width: 90%;
-            max-width: 350px;
+            max-width: 400px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .modal-title {
             font-size: 20px;
@@ -232,10 +234,29 @@
             margin-bottom: 15px;
             text-align: center;
         }
+        .tab-container {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: #777;
+            font-size: 14px;
+        }
+        .tab-btn.active {
+            color: #111;
+            border-bottom: 2px solid #111;
+        }
         .modal-input {
             width: 100%;
             padding: 10px 12px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 14px;
@@ -251,6 +272,7 @@
             font-weight: bold;
             cursor: pointer;
             font-size: 14px;
+            margin-top: 5px;
         }
         .modal-close-btn {
             position: absolute;
@@ -262,6 +284,9 @@
             cursor: pointer;
             color: #777;
         }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .user-greeting { font-size: 12px; color: #444; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -270,6 +295,7 @@
         <div class="menu-icon">☰</div>
         <div class="logo-area">
             <div class="logo-title">PGT Outfits</div>
+            <div id="header-user-display" class="user-greeting"></div>
         </div>
         <div class="cart-icon">🛒<span id="cart-count-badge" style="font-size: 12px; background: red; color: white; border-radius: 50%; padding: 2px 6px; vertical-align: top;">0</span></div>
     </header>
@@ -378,14 +404,34 @@
         </div>
     </div>
 
-    <!-- Login Pop-up Modal -->
+    <!-- Login / Create Account Modal -->
     <div class="modal-overlay" id="login-modal">
         <div class="modal-card">
             <button class="modal-close-btn" onclick="toggleLoginModal(false)">✕</button>
-            <div class="modal-title">Login to PGT</div>
-            <input type="email" class="modal-input" placeholder="Enter your email">
-            <input type="password" class="modal-input" placeholder="Enter your password">
-            <button class="modal-submit-btn" onclick="alert('Login successful!'); toggleLoginModal(false);">Login</button>
+            <div class="modal-title">PGT Customer Portal</div>
+            
+            <div class="tab-container">
+                <button class="tab-btn active" id="login-tab-btn" onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" id="register-tab-btn" onclick="switchTab('register')">Create Account</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-section" class="form-section active">
+                <input type="email" id="login-email" class="modal-input" placeholder="Mail ID">
+                <input type="password" id="login-password" class="modal-input" placeholder="Password">
+                <button class="modal-submit-btn" onclick="handleLogin()">Login</button>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-section" class="form-section">
+                <input type="text" id="reg-name" class="modal-input" placeholder="Full Name">
+                <input type="text" id="reg-address" class="modal-input" placeholder="Delivery Address">
+                <input type="tel" id="reg-phone" class="modal-input" placeholder="Phone Number">
+                <input type="tel" id="reg-whatsapp" class="modal-input" placeholder="WhatsApp Number">
+                <input type="email" id="reg-email" class="modal-input" placeholder="Mail ID">
+                <input type="password" id="reg-password" class="modal-input" placeholder="Create Password">
+                <button class="modal-submit-btn" onclick="handleRegister()">Register Account</button>
+            </div>
         </div>
     </div>
 
@@ -401,7 +447,7 @@
         </button>
         <button class="nav-item" onclick="toggleLoginModal(true)">
             <div>👤</div>
-            <div>Login</div>
+            <div id="nav-login-label">Login</div>
         </button>
     </div>
 
@@ -409,6 +455,15 @@
         let totalCount = 0;
         let totalPrice = 0;
         let currentCategory = 'All';
+
+        window.onload = function() {
+            let loggedUser = localStorage.getItem('pgt_logged_user');
+            if (loggedUser) {
+                let userObj = JSON.parse(loggedUser);
+                document.getElementById('header-user-display').innerText = `Hello, ${userObj.name}`;
+                document.getElementById('nav-login-label').innerText = 'Account';
+            }
+        };
 
         function addToCart(price) {
             totalCount += 1;
@@ -452,7 +507,6 @@
         function goHome() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
             document.getElementById('search-input').value = '';
-            // Reset to 'All' category
             let allBtn = document.querySelector('.categories .category-btn');
             filterCategory('All', allBtn);
         }
@@ -464,6 +518,71 @@
         function toggleLoginModal(show) {
             let modal = document.getElementById('login-modal');
             modal.style.display = show ? 'flex' : 'none';
+        }
+
+        function switchTab(tab) {
+            let loginTab = document.getElementById('login-tab-btn');
+            let regTab = document.getElementById('register-tab-btn');
+            let loginSec = document.getElementById('login-section');
+            let regSec = document.getElementById('register-section');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                regTab.classList.remove('active');
+                loginSec.classList.add('active');
+                regSec.classList.remove('active');
+            } else {
+                regTab.classList.add('active');
+                loginTab.classList.remove('active');
+                regSec.classList.add('active');
+                loginSec.classList.remove('active');
+            }
+        }
+
+        function handleRegister() {
+            let name = document.getElementById('reg-name').value.trim();
+            let address = document.getElementById('reg-address').value.trim();
+            let phone = document.getElementById('reg-phone').value.trim();
+            let whatsapp = document.getElementById('reg-whatsapp').value.trim();
+            let email = document.getElementById('reg-email').value.trim();
+            let password = document.getElementById('reg-password').value.trim();
+
+            if (!name || !address || !phone || !whatsapp || !email || !password) {
+                alert('Please fill in all the details to register your account.');
+                return;
+            }
+
+            let userData = { name, address, phone, whatsapp, email, password };
+            localStorage.setItem('pgt_user_' + email, JSON.stringify(userData));
+            localStorage.setItem('pgt_logged_user', JSON.stringify(userData));
+
+            alert('Account created successfully!');
+            document.getElementById('header-user-display').innerText = `Hello, ${name}`;
+            document.getElementById('nav-login-label').innerText = 'Account';
+            toggleLoginModal(false);
+        }
+
+        function handleLogin() {
+            let email = document.getElementById('login-email').value.trim();
+            let password = document.getElementById('login-password').value.trim();
+
+            let savedUserStr = localStorage.getItem('pgt_user_' + email);
+            if (!savedUserStr) {
+                alert('No account found with this Mail ID. Please register first.');
+                return;
+            }
+
+            let userObj = JSON.parse(savedUserStr);
+            if (userObj.password !== password) {
+                alert('Incorrect password. Please try again.');
+                return;
+            }
+
+            localStorage.setItem('pgt_logged_user', JSON.stringify(userObj));
+            alert('Login successful!');
+            document.getElementById('header-user-display').innerText = `Hello, ${userObj.name}`;
+            document.getElementById('nav-login-label').innerText = 'Account';
+            toggleLoginModal(false);
         }
     </script>
 
