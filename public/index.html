@@ -22,7 +22,7 @@
             background: #fff;
             border-bottom: 1px solid #eee;
         }
-        .menu-icon, .cart-icon { font-size: 22px; cursor: pointer; }
+        .menu-icon, .cart-icon { font-size: 22px; cursor: pointer; position: relative; }
         .logo-area { text-align: center; }
         .logo-title { font-size: 18px; font-weight: bold; color: #111; margin-top: 2px; letter-spacing: 0.5px; }
         .hero-banner {
@@ -245,7 +245,7 @@
         .nav-item.active { color: #111; font-weight: bold; }
         .nav-item div:first-child { font-size: 18px; margin-bottom: 2px; }
 
-        /* Login/Register Modal Styles */
+        /* Modals */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -261,7 +261,7 @@
             padding: 25px;
             border-radius: 12px;
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             position: relative;
             max-height: 90vh;
@@ -339,6 +339,30 @@
             margin-top: 2px;
             text-decoration: underline;
         }
+        .cart-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+        .pay-now-btn {
+            background: #2e7d32;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -350,7 +374,7 @@
             <div id="header-user-display" class="user-greeting"></div>
             <div id="header-logout" class="logout-link" onclick="handleLogout()" style="display:none;">Logout</div>
         </div>
-        <div class="cart-icon">🛒<span id="cart-count-badge" style="font-size: 12px; background: red; color: white; border-radius: 50%; padding: 2px 6px; vertical-align: top;">0</span></div>
+        <div class="cart-icon" onclick="toggleCartModal(true)">🛒<span id="cart-count-badge" style="font-size: 12px; background: red; color: white; border-radius: 50%; padding: 2px 6px; vertical-align: top;">0</span></div>
     </header>
 
     <!-- Admin Customer List Panel -->
@@ -414,7 +438,7 @@
                     <span class="current-price">₹699</span>
                     <span class="original-price">₹1,299</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart(699)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Oversized Streetwear Tee', 699)">🛒 Add Cart</button>
             </div>
         </div>
 
@@ -429,7 +453,7 @@
                     <span class="current-price">₹1,199</span>
                     <span class="original-price">₹1,999</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart(1199)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Classic Black Hoodie', 1199)">🛒 Add Cart</button>
             </div>
         </div>
 
@@ -444,7 +468,7 @@
                     <span class="current-price">₹549</span>
                     <span class="original-price">₹999</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart(549)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Pro Esports Gaming Jersey', 549)">🛒 Add Cart</button>
             </div>
         </div>
 
@@ -459,7 +483,7 @@
                     <span class="current-price">₹849</span>
                     <span class="original-price">₹1,499</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart(849)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Casual Linen Shirt', 849)">🛒 Add Cart</button>
             </div>
         </div>
 
@@ -474,7 +498,7 @@
                     <span class="current-price">₹999</span>
                     <span class="original-price">₹1,799</span>
                 </div>
-                <button class="add-to-cart-btn" onclick="addToCart(999)">🛒 Add Cart</button>
+                <button class="add-to-cart-btn" onclick="addToCart('Cargo Jogger Pants', 999)">🛒 Add Cart</button>
             </div>
         </div>
     </div>
@@ -512,6 +536,20 @@
         </div>
     </div>
 
+    <!-- Cart & Direct UPI App Checkout Modal -->
+    <div class="modal-overlay" id="cart-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="toggleCartModal(false)">✕</button>
+            <div class="modal-title">Your Shopping Cart</div>
+            <div id="cart-items-container" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;"></div>
+            <div style="font-weight: bold; text-align: right; margin-bottom: 15px; font-size: 16px;">
+                Total: ₹<span id="cart-modal-total">0.00</span>
+            </div>
+            
+            <button class="pay-now-btn" onclick="triggerUPIPayment()">⚡ Pay Now (GPay / PhonePe / Paytm)</button>
+        </div>
+    </div>
+
     <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
         <button class="nav-item active" onclick="goHome()">
@@ -529,12 +567,15 @@
     </div>
 
     <script>
-        let totalCount = 0;
-        let totalPrice = 0;
+        let cartItems = [];
         let currentCategory = 'All';
 
         const ADMIN_EMAIL = "zenoclothing2026@gmail.com";
         const ADMIN_PASS = "zeno@2026";
+        
+        // Your exact UPI ID configured for instant app checkout
+        const STORE_UPI_ID = "ebineshebinesh2007@oksbi"; 
+        const STORE_NAME = "Zeno Clothing";
 
         window.onload = function() {
             let loggedUser = localStorage.getItem('zeno_logged_user');
@@ -546,12 +587,82 @@
             }
         };
 
-        function addToCart(price) {
-            totalCount += 1;
-            totalPrice += price;
+        function addToCart(title, price) {
+            cartItems.push({ title, price });
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            let totalCount = cartItems.length;
+            let totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
+
             document.getElementById('item-count').innerText = totalCount;
             document.getElementById('cart-count-badge').innerText = totalCount;
             document.getElementById('total-price').innerText = totalPrice.toFixed(2);
+            document.getElementById('cart-modal-total').innerText = totalPrice.toFixed(2);
+
+            let container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+            if (totalCount === 0) {
+                container.innerHTML = `<div style="text-align: center; color: #777; padding: 20px;">Your cart is empty.</div>`;
+                return;
+            }
+
+            cartItems.forEach((item, index) => {
+                container.innerHTML += `<div class="cart-item-row">
+                    <span>${item.title}</span>
+                    <span>₹${item.price} <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer; margin-left:8px;">✕</button></span>
+                </div>`;
+            });
+        }
+
+        function removeFromCart(index) {
+            cartItems.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCartModal(show) {
+            let modal = document.getElementById('cart-modal');
+            modal.style.display = show ? 'flex' : 'none';
+        }
+
+        function triggerUPIPayment() {
+            let loggedUser = localStorage.getItem('zeno_logged_user');
+            if (!loggedUser) {
+                alert("Please log in to your account before proceeding to payment.");
+                toggleCartModal(false);
+                toggleLoginModal(true);
+                return;
+            }
+            if (cartItems.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            let totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
+            
+            // Direct UPI Intent Link opening Google Pay, PhonePe, Paytm automatically
+            let upiLink = `upi://pay?pa=${STORE_UPI_ID}&pn=${encodeURIComponent(STORE_NAME)}&am=${totalPrice}&cu=INR`;
+            
+            // Open UPI App
+            window.location.href = upiLink;
+
+            // Also open WhatsApp to send order confirmation details to admin
+            let userObj = JSON.parse(loggedUser);
+            let orderText = `*New Paid Order - ZENO CLOTHING*%0A` +
+                            `Name: ${userObj.name}%0A` +
+                            `Phone: ${userObj.phone}%0A` +
+                            `Address: ${userObj.address}%0A` +
+                            `Total Paid: ₹${totalPrice}%0A%0A` +
+                            `Items: ` + cartItems.map(i => i.title).join(', ');
+
+            let adminWhatsApp = "919842424242"; // Replace with your WhatsApp number
+            setTimeout(() => {
+                window.open(`https://wa.me/${adminWhatsApp}?text=${orderText}`, '_blank');
+                cartItems = [];
+                updateCartUI();
+                toggleCartModal(false);
+            }, 1500);
         }
 
         function filterCategory(category, buttonElement) {
@@ -663,7 +774,6 @@
             let password = document.getElementById('login-password').value.trim();
             let statusEl = document.getElementById('login-status');
 
-            // Check if Admin Login
             if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
                 let adminObj = { name: "Admin", email: ADMIN_EMAIL };
                 localStorage.setItem('zeno_logged_user', JSON.stringify(adminObj));
@@ -675,7 +785,7 @@
 
                 setTimeout(() => {
                     toggleLoginModal(false);
-                    toggleAdminPanel(); // Automatically open admin panel on admin login
+                    toggleAdminPanel();
                 }, 1000);
                 return;
             }
@@ -718,7 +828,7 @@
         function toggleAdminPanel() {
             let loggedUser = localStorage.getItem('zeno_logged_user');
             if (!loggedUser) {
-                alert("Please log in first.");
+                alert("Please log in first as Admin.");
                 toggleLoginModal(true);
                 return;
             }
